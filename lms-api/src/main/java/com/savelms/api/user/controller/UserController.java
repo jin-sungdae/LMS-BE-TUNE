@@ -71,9 +71,6 @@ public class UserController {
                .build());
     }
 
-
-
-
     private final UserService userService;
 
     @PreAuthorize("hasAuthority('user.read')")
@@ -143,7 +140,7 @@ public class UserController {
     }
 
     @PostMapping("/auth/login")
-    public String fakeLogin(@Validated @ModelAttribute UserLoginRequest request) {
+    public APIDataResponse<String> fakeLogin(@Validated @ModelAttribute UserLoginRequest request) {
         throw new IllegalStateException(
             "This method shouldn't be called. It's implemented by Spring Security filters.");
     }

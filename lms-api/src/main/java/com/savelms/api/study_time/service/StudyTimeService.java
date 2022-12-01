@@ -1,5 +1,7 @@
 package com.savelms.api.study_time.service;
 
+import com.savelms.api.constant.ErrorCode;
+import com.savelms.api.exception.GeneralException;
 import com.savelms.api.statistical.service.DayStatisticalDataService;
 import com.savelms.api.study_time.dto.StudyTimeResponse;
 import com.savelms.api.study_time.dto.StudyingUserResponse;
@@ -59,42 +61,58 @@ public class StudyTimeService {
 
     @Transactional(readOnly = true)
     public List<StudyTimeResponse> getStudyTimes(String apiId) {
-        List<StudyTime> studyTimes = studyTimeRepository.findByUserApiId(apiId);
+        try {
+            List<StudyTime> studyTimes = studyTimeRepository.findByUserApiId(apiId);
 
-        return studyTimes.stream()
-                .map(StudyTimeResponse::from)
-                .sorted(Comparator.comparing(StudyTimeResponse::getBeginTime))
-                .collect(Collectors.toList());
+            return studyTimes.stream()
+                    .map(StudyTimeResponse::from)
+                    .sorted(Comparator.comparing(StudyTimeResponse::getBeginTime))
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);
+        }
     }
 
     @Transactional(readOnly = true)
     public List<StudyTimeResponse> getTodayStudyTimes(String apiId) {
-        List<StudyTime> studyTimes = studyTimeRepository.findByUserApiIdAndDate(apiId, LocalDate.now());
+        try {
+            List<StudyTime> studyTimes = studyTimeRepository.findByUserApiIdAndDate(apiId, LocalDate.now());
 
-        return studyTimes.stream()
-                .map(StudyTimeResponse::from)
-                .sorted(Comparator.comparing(StudyTimeResponse::getBeginTime))
-                .collect(Collectors.toList());
+            return studyTimes.stream()
+                    .map(StudyTimeResponse::from)
+                    .sorted(Comparator.comparing(StudyTimeResponse::getBeginTime))
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);
+        }
     }
 
     @Transactional(readOnly = true)
     public List<StudyTimeResponse> getStudyTimesByDate(String apiId, LocalDate date) {
-        List<StudyTime> studyTimes = studyTimeRepository.findByUserApiIdAndDate(apiId, date);
+        try {
+            List<StudyTime> studyTimes = studyTimeRepository.findByUserApiIdAndDate(apiId, date);
 
-        return studyTimes.stream()
-                .map(StudyTimeResponse::from)
-                .sorted(Comparator.comparing(StudyTimeResponse::getBeginTime))
-                .collect(Collectors.toList());
+            return studyTimes.stream()
+                    .map(StudyTimeResponse::from)
+                    .sorted(Comparator.comparing(StudyTimeResponse::getBeginTime))
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);
+        }
     }
 
     @Transactional(readOnly = true)
     public List<StudyingUserResponse> getStudyingUser(String userId) {
-        List<StudyTime> studyTimes = studyTimeRepository.findByIsStudying(userId, true);
+        try {
+            List<StudyTime> studyTimes = studyTimeRepository.findByIsStudying(userId, true);
 
-        return studyTimes.stream()
-                .map(StudyingUserResponse::new)
-                .sorted(Comparator.comparing(StudyingUserResponse::getBeginTime))
-                .collect(Collectors.toList());
+            return studyTimes.stream()
+                    .map(StudyingUserResponse::new)
+                    .sorted(Comparator.comparing(StudyingUserResponse::getBeginTime))
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);
+        }
     }
 
 

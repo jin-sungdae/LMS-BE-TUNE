@@ -19,17 +19,8 @@ import javax.validation.ConstraintViolationException;
 public class APIExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler
-    public ResponseEntity<Object> general(ConstraintViolationException e, WebRequest request) {
-        ErrorCode errorCode = ErrorCode.VALIDATION_ERROR;
-        HttpStatus status = HttpStatus.BAD_REQUEST;
-
-        return super.handleExceptionInternal(
-                e,
-                APIErrorResponse.of(false, errorCode.getCode(), errorCode.getMessage()),
-                HttpHeaders.EMPTY,
-                status,
-                request
-        );
+    public ResponseEntity<Object> validation(ConstraintViolationException e, WebRequest request) {
+        return callSuperInternalExceptionHandler(e, ErrorCode.VALIDATION_ERROR, HttpHeaders.EMPTY, HttpStatus.BAD_REQUEST, request);
     }
 
     @ExceptionHandler
@@ -39,13 +30,7 @@ public class APIExceptionHandler extends ResponseEntityExceptionHandler {
                 HttpStatus.BAD_REQUEST :
                 HttpStatus.INTERNAL_SERVER_ERROR;
 
-        return super.handleExceptionInternal(
-                e,
-                APIErrorResponse.of(false, errorCode.getCode(), errorCode.getMessage()),
-                HttpHeaders.EMPTY,
-                status,
-                request
-        );
+        return callSuperInternalExceptionHandler(e, errorCode, HttpHeaders.EMPTY, status, request);
     }
 
     @ExceptionHandler
@@ -53,13 +38,7 @@ public class APIExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
         HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 
-        return super.handleExceptionInternal(
-                e,
-                APIErrorResponse.of(false, errorCode.getCode(), errorCode.getMessage()),
-                HttpHeaders.EMPTY,
-                httpStatus,
-                request
-        );
+        return callSuperInternalExceptionHandler(e, errorCode, HttpHeaders.EMPTY, httpStatus, request);
     }
 
     @Override
@@ -71,6 +50,16 @@ public class APIExceptionHandler extends ResponseEntityExceptionHandler {
         return super.handleExceptionInternal(
                 e,
                 APIErrorResponse.of(false, errorCode.getCode(), errorCode.getMessage(e)),
+                headers,
+                status,
+                request
+        );
+    }
+
+    private ResponseEntity<Object> callSuperInternalExceptionHandler(Exception ex, ErrorCode errorCode, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        return super.handleExceptionInternal(
+                ex,
+                APIErrorResponse.of(false, errorCode.getCode(), errorCode.getMessage(ex)),
                 headers,
                 status,
                 request
