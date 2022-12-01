@@ -4,8 +4,8 @@ buildscript {
     }
 
     dependencies {
-        classpath "org.springframework.boot:spring-boot-gradle-plugin:2.5.2"
-        classpath "io.spring.gradle:dependency-management-plugin:1.0.11.RELEASE"
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:2.7.3"
+        classpath "io.spring.gradle:dependency-management-plugin:1.0.13.RELEASE"
     }
 }
 
@@ -41,12 +41,6 @@ subprojects {
         runtimeOnly 'com.h2database:h2'
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
         runtimeOnly 'mysql:mysql-connector-java'
-        // compile group: 'io.jsonwebtoekn', name: 'jjwt', version: '0.9.1' jjwt 라이브러리 추가 안됨
-        //     implementation 'io.jsonwebtoken:jjwt:0.9.1'
-        //    implementation 'org.springframework.boot:spring-boot-starter-security'
-        //swagger
-        // implementation 'io.springfox:springfox-boot-starter:3.0.0'
-        //springdoc
         implementation 'org.springdoc:springdoc-openapi-ui:1.5.4'
         implementation 'org.springframework.boot:spring-boot-starter-validation'
         implementation 'org.springframework.boot:spring-boot-starter-security'
@@ -56,10 +50,8 @@ subprojects {
 
     }
 
-    tasks.named('test') {
-        useJUnitPlatform()
-    }
 }
+
 project(':lms-api') {
     dependencies {
         implementation project(':lms-core')
