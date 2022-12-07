@@ -18,3 +18,7 @@ springBoot {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+bootJar {
+    archiveName('app.jar')
+}

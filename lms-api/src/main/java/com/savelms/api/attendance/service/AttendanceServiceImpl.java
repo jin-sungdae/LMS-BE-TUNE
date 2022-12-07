@@ -104,7 +104,7 @@ public class AttendanceServiceImpl implements AttendanceService {
         double weekAbsentScore = 0;
         for (AttendanceStatus a : list1) {
             if (a == TARDY) {
-                score += 0.25;
+                score += 0.25;      // 점수 enum으로 변경
             } else if (a == ABSENT) {
                 score += 0.5;
             } else if (a == PRESENT) {

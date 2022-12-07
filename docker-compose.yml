@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+  database:
+    container_name: savedb2
+    image: mysql/mysql-server:5.7
+    environment:
+      MYSQL_DATABASE: "savedb2"
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      TZ: 'Asia/Seoul'
+    volumes:
+      - ./database/config:/etc/mysql/conf.d
+    ports:
+      - "3306:3306"
+#    networks:
+#      - test_network
+    restart: always
+  lmssave:
+    restart: always
+    container_name: lmssave
+    build:
+      dockerfile: Dockerfile
+      context: .
+    image: lms/save
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/savedb2?useSSL=false&characterEncoding=UTF-8&serverTimeZone=Asia/Seoul
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 5131
+    ports:
+      - "8080:8080"
+    depends_on:
+      - database
+#    networks:
+#      - test_network
+    #restart: always
+#networks:
+#  - test_network:
