@@ -44,10 +44,6 @@ public interface DayStatisticalDataRepository extends JpaRepository<DayStatistic
 
 
 
-    @Query("select SUM(d.studyTimeScore) from DayStatisticalData d where d.user.username =:username " +
-            "and SUBSTRING(d.calendar.date, 6, 2) =:month")
-    Optional<Double> findTotalStudyTimePerMonth(@Param("username") String username, String month);
-
     @Modifying(clearAutomatically = true)
     @Query(value = "update day_statistical_data d " +
             "inner join User u on u.user_id = d.user_id " +

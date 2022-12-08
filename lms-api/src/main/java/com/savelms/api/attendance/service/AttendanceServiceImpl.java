@@ -46,6 +46,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     private final UserRepository userRepository;
     private final VacationService vacationService;
     private final CalendarRepository calendarRepository;
+    private static Double day = 0.5D;
 
     @Override
     @Transactional
@@ -59,7 +60,7 @@ public class AttendanceServiceImpl implements AttendanceService {
 
         final Optional<Attendance> original = attendanceRepository.findById(attendanceId);
         if (original.get().getCheckInStatus().equals(VACATION)) {
-            vacationService.addVacation(new AddVacationRequest(0.5D), findAttendanceOptional.get().getUser().getApiId());
+            vacationService.addVacation(new AddVacationRequest(day), findAttendanceOptional.get().getUser().getApiId());
         }
         original
                 .ifPresent(allUser -> {
@@ -104,11 +105,11 @@ public class AttendanceServiceImpl implements AttendanceService {
         double weekAbsentScore = 0;
         for (AttendanceStatus a : list1) {
             if (a == TARDY) {
-                score += 0.25;      // 점수 enum으로 변경
+                score += TARDY.getAttendancePenalty();      // 점수 enum으로 변경
             } else if (a == ABSENT) {
-                score += 0.5;
+                score += ABSENT.getAttendancePenalty();
             } else if (a == PRESENT) {
-                participateScore += 0.5;
+                participateScore += PRESENT.getAttendanceScore();
             }
         }
         weekAbsentScore = list3.size() * 0.5;
@@ -116,7 +117,7 @@ public class AttendanceServiceImpl implements AttendanceService {
         double result = score;
         double participateResult = participateScore;
         if (status == VACATION) {
-            vacationService.useVacation(new UseVacationRequest(0.5D, "휴가"), apiId);
+            vacationService.useVacation(new UseVacationRequest(day, "휴가"), apiId);
         }
         long noOfDaysBetween = ChronoUnit.DAYS.between(findAttendanceOptional.get().getCalendar().getDate(), LocalDate.now());
         Long calendarId = findAttendanceOptional.get().getCalendar().getId();
@@ -125,18 +126,18 @@ public class AttendanceServiceImpl implements AttendanceService {
             Optional<Attendance> attendStatus = attendanceRepository.findByUserIdAndCalendarId(findAttendanceOptional.get().getUser().getId(), calendarId);
             if (i != 0) {
                 if (attendStatus.get().getCheckInStatus() == TARDY) {
-                    score += 0.25;
+                    score += TARDY.getAttendancePenalty();
                 } else if (attendStatus.get().getCheckInStatus() == ABSENT) {
-                    score += 0.5;
+                    score += ABSENT.getAttendancePenalty();
                 } else if (attendStatus.get().getCheckInStatus() == PRESENT) {
-                    participateScore += 0.5;
+                    participateScore += PRESENT.getAttendanceScore();
                 }
                 if (attendStatus.get().getCheckOutStatus() == TARDY) {
-                    score += 0.25;
+                    score += TARDY.getAttendancePenalty();
                 } else if (attendStatus.get().getCheckOutStatus() == ABSENT) {
-                    score += 0.5;
+                    score += ABSENT.getAttendancePenalty();
                 } else if (attendStatus.get().getCheckOutStatus() == PRESENT) {
-                    participateScore += 0.5;
+                    participateScore += PRESENT.getAttendanceScore();
                 }
             }
             result = score;
@@ -164,7 +165,7 @@ public class AttendanceServiceImpl implements AttendanceService {
 
         final Optional<Attendance> original = attendanceRepository.findById(attendanceId);
         if (original.get().getCheckOutStatus().equals(VACATION)) {
-            vacationService.addVacation(new AddVacationRequest(0.5D), findAttendanceOptional.get().getUser().getApiId());
+            vacationService.addVacation(new AddVacationRequest(day), findAttendanceOptional.get().getUser().getApiId());
         }
         original
                 .ifPresent(allUser -> {
@@ -212,11 +213,11 @@ public class AttendanceServiceImpl implements AttendanceService {
         double weekAbsentScore = 0;
         for (AttendanceStatus a : list1) {
             if (a == TARDY) {
-                score += 0.25;
+                score += TARDY.getAttendancePenalty();
             } else if (a == ABSENT) {
-                score += 0.5;
+                score += ABSENT.getAttendancePenalty();
             } else if (a == PRESENT) {
-                participateScore += 0.5;
+                participateScore += PRESENT.getAttendanceScore();
             }
         }
          weekAbsentScore = list3.size() * 0.5;
@@ -225,7 +226,7 @@ public class AttendanceServiceImpl implements AttendanceService {
         double participateResult = participateScore;
 
         if (status == VACATION) {
-            vacationService.useVacation(new UseVacationRequest(0.5D, "휴가"), userApiId);
+            vacationService.useVacation(new UseVacationRequest(day, "휴가"), userApiId);
         }
 
         long noOfDaysBetween = ChronoUnit.DAYS.between(findAttendanceOptional.get().getCalendar().getDate(), LocalDate.now());
@@ -236,22 +237,18 @@ public class AttendanceServiceImpl implements AttendanceService {
             Optional<Attendance> attendStatus = attendanceRepository.findByUserIdAndCalendarId(findAttendanceOptional.get().getUser().getId(), calendarId);
             if (i != 0) {
                 if (attendStatus.get().getCheckInStatus() == TARDY) {
-                    score += 0.25;
+                    score += TARDY.getAttendancePenalty();
                 } else if (attendStatus.get().getCheckInStatus() == ABSENT) {
-                    score += 0.5;
+                    score += ABSENT.getAttendancePenalty();
                 } else if (attendStatus.get().getCheckInStatus() == PRESENT) {
-                    participateScore += 0.5;
-//                    if (Math.abs(calendarId - calendarRepository.findByDate(LocalDate.now()).get().getId()) < 7)
-//                        weekAbsentScore += 0.5;
+                    participateScore += PRESENT.getAttendanceScore();
                 }
                 if (attendStatus.get().getCheckOutStatus() == TARDY) {
-                    score += 0.25;
+                    score += TARDY.getAttendancePenalty();
                 } else if (attendStatus.get().getCheckOutStatus() == ABSENT) {
-                    score += 0.5;
+                    score += ABSENT.getAttendancePenalty();
                 } else if (attendStatus.get().getCheckOutStatus() == PRESENT) {
-                    participateScore += 0.5;
-//                    if (Math.abs(calendarId - calendarRepository.findByDate(LocalDate.now()).get().getId()) < 7)
-//                        weekAbsentScore += 0.5;
+                    participateScore += PRESENT.getAttendanceScore();
                 }
             }
             result = score;
