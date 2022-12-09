@@ -1,15 +1,13 @@
 package com.savelms.core.user.role.domain.repository;
 
-import com.savelms.core.user.AttendStatus;
 import com.savelms.core.user.role.domain.entity.UserRole;
-
-import java.time.LocalDateTime;
-import java.util.List;
-
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 public interface UserRoleRepository extends JpaRepository<UserRole, Long> {
 
@@ -26,5 +24,4 @@ public interface UserRoleRepository extends JpaRepository<UserRole, Long> {
     List<UserRole> findAllByDateAndAttendStatus(
             @Param("date") LocalDateTime date);
 
-    List<UserRole> findAllByCreatedAt(LocalDateTime date);
 }

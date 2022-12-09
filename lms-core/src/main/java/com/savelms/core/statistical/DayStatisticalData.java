@@ -3,10 +3,9 @@ package com.savelms.core.statistical;
 import com.savelms.core.BaseEntity;
 import com.savelms.core.calendar.domain.entity.Calendar;
 import com.savelms.core.user.domain.entity.User;
+import lombok.*;
 
 import javax.persistence.*;
-
-import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor

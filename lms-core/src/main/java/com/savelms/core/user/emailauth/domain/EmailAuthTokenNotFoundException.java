@@ -6,15 +6,4 @@ public class EmailAuthTokenNotFoundException extends RuntimeException{
         super();
     }
 
-    public EmailAuthTokenNotFoundException(String message) {
-        super(message);
-    }
-
-    public EmailAuthTokenNotFoundException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public EmailAuthTokenNotFoundException(Throwable cause) {
-        super(cause);
-    }
 }

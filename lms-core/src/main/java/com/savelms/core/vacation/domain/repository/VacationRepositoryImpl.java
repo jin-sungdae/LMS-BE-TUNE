@@ -5,8 +5,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,15 +26,4 @@ public class VacationRepositoryImpl implements VacationQueryRepository {
         return vacations.stream().findFirst();
     }
 
-    @Override
-    public Optional<Vacation> findFirstByUsername(String username) {
-        String query = "select v from Vacation v where v.user.username = :username order by v.id desc";
-
-        List<Vacation> vacations = em.createQuery(query, Vacation.class)
-                .setParameter("username", username)
-                .setMaxResults(1)
-                .getResultList();
-
-        return vacations.stream().findFirst();
-    }
 }

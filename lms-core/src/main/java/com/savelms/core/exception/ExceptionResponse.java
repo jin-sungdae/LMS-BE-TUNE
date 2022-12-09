@@ -12,7 +12,6 @@ public class ExceptionResponse {
     private String message;
     private LocalDateTime timeStamp;
 
-    protected ExceptionResponse() {}
 
     private ExceptionResponse(int status, String code, String message) {
         this.status = status;

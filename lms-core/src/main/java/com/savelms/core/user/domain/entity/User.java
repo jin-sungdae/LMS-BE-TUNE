@@ -264,7 +264,4 @@ public class User extends BaseEntity implements UserDetails, CredentialsContaine
         this.password = encodedPassword;
     }
 
-    public void setUesrAttendStatus(AttendStatus attendStatus) {
-        this.attendStatus = attendStatus;
-    }
 }

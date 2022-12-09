@@ -1,6 +1,5 @@
 package com.savelms.core.exception.study_time;
 
-import com.savelms.core.exception.ExceptionCode;
 import com.savelms.core.exception.ExceptionStatus;
 import lombok.Getter;
 
@@ -14,10 +13,4 @@ public class StudyTimeException extends RuntimeException {
         this.exceptionStatus = exceptionStatus;
     }
 
-    public StudyTimeException(ExceptionStatus exceptionStatus, String message) {
-        super(message);
-
-        exceptionStatus.setMessage(message);
-        this.exceptionStatus = exceptionStatus;
-    }
 }

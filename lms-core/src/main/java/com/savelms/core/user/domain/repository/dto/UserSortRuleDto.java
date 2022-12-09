@@ -19,21 +19,4 @@ public class UserSortRuleDto {
     private String fieldName;
     private String sortType;
 
-    public static UserSortRuleDto toUserSortRoleDto(String sortRule) {
-
-        String[] split = sortRule.split(":");
-        String field = split[0];
-        String sortType = split[1];
-
-        if (split.length != 2 ||
-            !fields.contains(field) || !sortTypes.contains(sortType)) {
-            throw new QueryStringFormatException("sort의 형식이 잘못되었습니다.");
-        }
-
-
-        return UserSortRuleDto.builder()
-            .fieldName(field)
-            .sortType(sortType)
-            .build();
-    }
 }
