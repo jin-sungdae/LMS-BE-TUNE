@@ -2,10 +2,10 @@ package com.savelms.api.user.controller.dto;
 
 import com.savelms.api.user.passwordvalidator.annotation.ValidPassword;
 import io.swagger.v3.oas.annotations.media.Schema;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+
+import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter

@@ -1,21 +1,22 @@
 package com.savelms.api.user.userrole.service;
 
-import com.savelms.core.team.domain.entity.UserTeam;
-import com.savelms.core.user.AttendStatus;
 import com.savelms.core.user.domain.entity.User;
 import com.savelms.core.user.role.RoleEnum;
 import com.savelms.core.user.role.domain.entity.UserRole;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.*;
-import java.util.stream.Collectors;
-
 import com.savelms.core.user.role.domain.repository.UserRoleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -42,10 +43,6 @@ public class UserRoleService {
         Map<User, List<UserRole>> userAndUserRoles
                 = userRoleRepository.findAllByDateAndAttendStatus(LocalDateTime.of(date, LocalTime.MAX))
                 .stream().collect(Collectors.groupingBy(UserRole::getUser));
-
-//        = userTeamRepository.findAllByCreatedAt(LocalDateTime.of(date, LocalTime.MAX))
-//                .stream().filter(x -> x.getUser().getAttendStatus().equals(attendStatus))
-//                .collect(Collectors.groupingBy(UserTeam::getUser));
 
         for (User user : userAndUserRoles.keySet()) {
             UserRole userRole = userAndUserRoles.get(user).stream().max(Comparator.comparing(UserRole::getCreatedAt)).get();

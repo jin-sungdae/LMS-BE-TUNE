@@ -1,12 +1,12 @@
 package com.savelms.api.user.controller.dto;
 
-import com.savelms.core.user.domain.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.List;
-import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+
+import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Getter
 @Setter

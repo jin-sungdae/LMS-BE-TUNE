@@ -13,8 +13,6 @@ public class UseVacationRequest {
     @NotNull
     private String reason;
 
-    public UseVacationRequest() {}
-
     public UseVacationRequest(Double usedDays, String reason) {
         this.usedDays = usedDays;
         this.reason = reason;

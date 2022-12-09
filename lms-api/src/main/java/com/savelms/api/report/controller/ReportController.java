@@ -1,17 +1,11 @@
 package com.savelms.api.report.controller;
 
-import com.savelms.api.report.dto.MonthReportDto;
-import com.savelms.api.report.dto.MonthReportResponse;
 import com.savelms.api.report.dto.ReportResponse;
 import com.savelms.api.report.service.ReportService;
-import com.savelms.api.study_time.dto.StudyTimeResponse;
-import com.savelms.core.attendance.dto.CheckIOReq;
 import com.savelms.core.monthreport.MonthReport;
 import com.savelms.core.monthreport.MonthReportRepository;
 import com.savelms.core.study_time.domain.entity.StudyTime;
 import com.savelms.core.user.domain.repository.UserRepository;
-import com.savelms.core.user.role.RoleEnum;
-import com.savelms.core.user.role.domain.entity.Role;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
@@ -21,12 +15,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -35,8 +30,6 @@ import java.util.Optional;
 public class ReportController {
 
     private final ReportService reportService;
-    private final UserRepository userRepository;
-    private final MonthReportRepository monthReportRepository;
 
     //test7
     /*

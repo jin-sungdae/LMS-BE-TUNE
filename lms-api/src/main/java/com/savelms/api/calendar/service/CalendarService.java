@@ -32,11 +32,5 @@ public class CalendarService {
                         + "가 없습니다."));
     }
 
-    @Transactional
-    public Long updateDayType(Long calendarId, DayType updateDayType) {
-        Calendar calendar = findById(calendarId);
-        calendar.changeDayType(updateDayType);
-        return calendar.getId();
-    }
 
 }

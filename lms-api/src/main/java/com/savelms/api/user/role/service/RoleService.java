@@ -3,10 +3,11 @@ package com.savelms.api.user.role.service;
 import com.savelms.core.user.role.RoleEnum;
 import com.savelms.core.user.role.domain.entity.Role;
 import com.savelms.core.user.role.domain.repository.RoleRepository;
-import javax.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityNotFoundException;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)

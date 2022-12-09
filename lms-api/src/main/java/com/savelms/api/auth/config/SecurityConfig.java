@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.savelms.api.auth.controller.dto.LoginResponseDto;
 import com.savelms.core.user.domain.entity.User;
 import com.savelms.core.user.role.domain.entity.UserRole;
-import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +19,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 // spring security 필터를 스프링 필터체인에 동록
@@ -126,28 +126,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/swagger-ui/**");
 
     }
-
-
-    //인증 방식 수동 지정. userDetailsService, passwordEncoder 하나일때는 상관없음.
-//    @Override
-//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.userDetailsService(new JpaUserDetailService(userRepository)).passwordEncoder(bCryptPasswordEncoder());
-//    }
-
-//    private void addSameSiteCookieAttribute(HttpServletResponse response) {
-//        Collection<String> headers = response.getHeaders(HttpHeaders.SET_COOKIE);
-//        boolean firstHeader = true;
-//        // there can be multiple Set-Cookie attributes
-//        for (String header : headers) {
-//            if (firstHeader) {
-//                response.setHeader(HttpHeaders.SET_COOKIE,
-//                    String.format("%s; %s", header, "SameSite=None"));
-//                firstHeader = false;
-//                continue;
-//            }
-//            response.addHeader(HttpHeaders.SET_COOKIE,
-//                String.format("%s; %s", header, "SameSite=None"));
-//        }
-//    }
 
 }

@@ -7,7 +7,6 @@ import com.savelms.api.vacation.dto.VacationResponse;
 import com.savelms.core.exception.ExceptionStatus;
 import com.savelms.core.exception.user.UserException;
 import com.savelms.core.exception.vacation.VacationException;
-import com.savelms.core.user.AttendStatus;
 import com.savelms.core.user.domain.entity.User;
 import com.savelms.core.user.domain.repository.UserRepository;
 import com.savelms.core.vacation.domain.entity.Vacation;

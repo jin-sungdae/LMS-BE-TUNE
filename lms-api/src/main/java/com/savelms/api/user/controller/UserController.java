@@ -2,25 +2,13 @@ package com.savelms.api.user.controller;
 
 import com.savelms.api.commondata.APIDataResponse;
 import com.savelms.api.todo.controller.dto.ListResponse;
-import com.savelms.api.user.controller.dto.UserChangePasswordRequest;
-import com.savelms.api.user.controller.dto.UserChangeAttendStatusRequest;
-import com.savelms.api.user.controller.dto.UserChangeAttendStatusResponse;
-import com.savelms.api.user.controller.dto.UserChangeRoleRequest;
-import com.savelms.api.user.controller.dto.UserChangeRoleResponse;
-import com.savelms.api.user.controller.dto.UserChangeTeamRequest;
-import com.savelms.api.user.controller.dto.UserChangeTeamResponse;
-import com.savelms.api.user.controller.dto.UserLoginRequest;
-import com.savelms.api.user.controller.dto.UserParticipatingIdResponse;
-import com.savelms.api.user.controller.dto.UserResponseDto;
-import com.savelms.api.user.controller.dto.UserSignUpRequest;
-import com.savelms.api.user.controller.dto.UserSignUpResponse;
+import com.savelms.api.user.controller.dto.*;
 import com.savelms.api.user.controller.error.ErrorResult;
-import com.savelms.core.exception.PasswordNotMatchException;
 import com.savelms.api.user.service.UserService;
+import com.savelms.core.exception.PasswordNotMatchException;
 import com.savelms.core.user.domain.DuplicateUsernameException;
 import com.savelms.core.user.domain.entity.User;
 import io.swagger.v3.oas.annotations.Parameter;
-import javax.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
@@ -30,16 +18,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.persistence.EntityNotFoundException;
 
 @Slf4j
 @RestController

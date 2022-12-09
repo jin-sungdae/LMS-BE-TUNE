@@ -14,7 +14,6 @@ public class UpdateStudyTimeRequest {
     @NotNull
     private LocalDateTime endTime;
 
-    protected UpdateStudyTimeRequest() {}
 
     public UpdateStudyTimeRequest(LocalDateTime beginTime, LocalDateTime endTime) {
         this.beginTime = beginTime;

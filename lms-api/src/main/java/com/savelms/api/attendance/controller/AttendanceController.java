@@ -4,20 +4,12 @@ import com.savelms.api.attendance.service.AttendanceService;
 import com.savelms.api.commondata.APIDataResponse;
 import com.savelms.api.todo.controller.dto.ListResponse;
 import com.savelms.api.user.service.UserService;
-import com.savelms.core.attendance.domain.AttendanceStatus;
-import com.savelms.core.attendance.domain.entity.Attendance;
 import com.savelms.core.attendance.domain.repository.AttendanceRepository;
 import com.savelms.core.attendance.dto.AttendanceDto;
 import com.savelms.core.attendance.dto.CheckIOReq;
-import com.savelms.core.exception.NoPermissionException;
 import com.savelms.core.user.domain.repository.UserRepository;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,11 +19,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.NoSuchElementException;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RestController

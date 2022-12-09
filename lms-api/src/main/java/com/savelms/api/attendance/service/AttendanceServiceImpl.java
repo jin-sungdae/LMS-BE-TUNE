@@ -5,8 +5,8 @@ import com.savelms.api.vacation.dto.UseVacationRequest;
 import com.savelms.api.vacation.service.VacationService;
 import com.savelms.core.attendance.domain.AttendanceStatus;
 import com.savelms.core.attendance.domain.entity.Attendance;
-import com.savelms.core.attendance.dto.AttendanceDto;
 import com.savelms.core.attendance.domain.repository.AttendanceRepository;
+import com.savelms.core.attendance.dto.AttendanceDto;
 import com.savelms.core.calendar.domain.repository.CalendarRepository;
 import com.savelms.core.exception.NoPermissionException;
 import com.savelms.core.statistical.DayStatisticalData;
@@ -16,21 +16,18 @@ import com.savelms.core.user.domain.entity.User;
 import com.savelms.core.user.domain.repository.UserRepository;
 import com.savelms.core.user.role.RoleEnum;
 import com.savelms.core.user.role.domain.entity.UserRole;
-
-import java.time.DayOfWeek;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoField;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalAdjusters;
-import java.util.*;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAdjusters;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.savelms.core.attendance.domain.AttendanceStatus.*;
@@ -265,40 +262,6 @@ public class AttendanceServiceImpl implements AttendanceService {
             });
             calendarId++;
         }
-    }
-
-    private boolean validateUserAndDatePermission(Attendance attendance, User user, LocalDate date) {
-        //지난 날짜는 출결 불가능
-        boolean isToday = attendance.getCalendar().getDate().isEqual(date);
-
-        //본인의 출결만 변경 가능
-        boolean isUserSelf = attendance.getUser().getUsername().equals(user.getUsername());
-
-        //시도하려는 유저의 가장 최근에 기록(createdAt)된 역할을 가져온다.
-        UserRole userRole = user.getUserRoles().stream()
-                .max(Comparator.comparing(UserRole::getCreatedAt))
-                .get();
-
-        //현재는 문자열로 비교하지만, Enum 타입으로 바뀌면 다른 방법 사용
-        //일단 String이라서 equals로 비교했습니다. Enum으로 바꾼다면 == 비교로 변경해도 괜찮습니다.
-        //아래 주석 코드 사용하기
-        String tryUserRole = userRole.getRole().getValue().name();
-        boolean isManager = (tryUserRole.equals(RoleEnum.ROLE_MANAGER.name()));
-
-//        RoleEnum tryUserRole = userRole.getRole().get  /*RoleEnum 필드 get메서드*/  ();
-//        boolean isManager = (tryUserRole == RoleEnum.ROLE_MANAGER);
-
-        //오늘 날짜이면서, 변경 권한이 있는 유저
-
-
-        return isToday && (isUserSelf || isManager);
-    }
-
-    public AttendanceDto getAttendanceByDate(String username, LocalDate date) {
-        Attendance attendance = attendanceRepository.findByUsernameAndDate(username, date)
-                .orElseThrow(() -> new EntityNotFoundException("출석정보를 찾지 못하였습니다."));
-
-        return new AttendanceDto(attendance);
     }
 
     public Map<Long, Attendance> getAllAttendanceByDateAndAttendStatus(LocalDate date, AttendStatus attendStatus) {

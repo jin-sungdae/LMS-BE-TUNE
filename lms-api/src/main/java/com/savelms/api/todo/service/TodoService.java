@@ -1,31 +1,23 @@
 package com.savelms.api.todo.service;
 
 import com.savelms.api.calendar.service.CalendarService;
-import com.savelms.api.statistical.service.DayStatisticalDataService;
-import com.savelms.api.todo.controller.dto.AllUserTodoDto;
-import com.savelms.api.todo.controller.dto.AllUserTodoSingleTodoDto;
-import com.savelms.api.todo.controller.dto.CreateTodoRequest;
-import com.savelms.api.todo.controller.dto.GetMyTodosByDayResponse;
-import com.savelms.api.todo.controller.dto.GetTodoProgressResponse;
-import com.savelms.api.todo.controller.dto.ListResponse;
-import com.savelms.api.todo.controller.dto.UpdateTodoRequest;
-import com.savelms.api.user.service.UserService;
+import com.savelms.api.todo.controller.dto.*;
 import com.savelms.core.calendar.domain.entity.Calendar;
 import com.savelms.core.todo.domain.entity.Todo;
 import com.savelms.core.todo.domain.repository.TodoRepository;
-import com.savelms.core.user.AttendStatus;
 import com.savelms.core.user.domain.entity.User;
 import com.savelms.core.user.domain.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import javax.persistence.EntityNotFoundException;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Transactional(readOnly = true)
@@ -49,13 +41,6 @@ public class TodoService {
         Todo todo = Todo.createTodo(false, request.getTitle(), user, calendar);
         todoRepository.save(todo);
         return todo.getId();
-    }
-
-    public Todo findById(Long id) {
-        return todoRepository.findById(id).orElseThrow(() ->
-            new EntityNotFoundException("Todo not found by id: " + id)
-            );
-
     }
 
     public List<GetMyTodosByDayResponse> getMyAllTodoInToday(String userId, LocalDate localDate) {
@@ -163,7 +148,6 @@ public class TodoService {
                 .build();
             response.getContent().add(dto);
 
-            //statisticalDataService.updateTodoSuccessRate(dto.getWriterId(), dto.getProgress(), localDate);
         });
         response.setCount(response.getContent().size());
 

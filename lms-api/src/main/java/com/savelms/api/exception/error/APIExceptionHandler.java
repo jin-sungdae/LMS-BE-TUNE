@@ -3,7 +3,6 @@ package com.savelms.api.exception.error;
 import com.savelms.api.constant.ErrorCode;
 import com.savelms.api.exception.GeneralException;
 import com.savelms.api.exception.error.dto.APIErrorResponse;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,7 +1,6 @@
 package com.savelms.api.statistical.dto;
 
 import com.savelms.core.statistical.DayStatisticalData;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

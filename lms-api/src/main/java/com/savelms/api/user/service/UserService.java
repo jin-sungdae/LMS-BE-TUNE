@@ -8,7 +8,6 @@ import com.savelms.api.team.service.TeamService;
 import com.savelms.api.todo.controller.dto.ListResponse;
 import com.savelms.api.user.controller.dto.*;
 import com.savelms.api.user.role.service.RoleService;
-import com.savelms.core.attendance.domain.AttendanceStatus;
 import com.savelms.core.attendance.domain.entity.Attendance;
 import com.savelms.core.attendance.domain.repository.AttendanceRepository;
 import com.savelms.core.calendar.domain.entity.Calendar;
@@ -34,6 +33,14 @@ import com.savelms.core.user.role.domain.entity.Role;
 import com.savelms.core.user.role.domain.entity.UserRole;
 import com.savelms.core.user.role.domain.repository.RoleRepository;
 import com.savelms.core.user.role.domain.repository.UserRoleRepository;
+import com.savelms.core.vacation.domain.entity.Vacation;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
@@ -41,14 +48,6 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import javax.persistence.EntityNotFoundException;
-
-import com.savelms.core.vacation.domain.entity.Vacation;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import static java.util.Comparator.comparingLong;
 
