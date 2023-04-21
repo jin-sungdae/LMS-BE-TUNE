@@ -1,80 +1,63 @@
-# lmssavecadet
-
-# Save Cadet 구해줘 카뎃 LMS Back-End 
 
 
 # Description
 
-- 구해줘 카뎃 동아리의 Learning Management System 입니다.
-- 기존의 Numbers로 진행한 출결 관리, Todo List, 아오지 탄광 기능을 수정 및 디자인하였습니다.
-- 인원교체가 빈번하게 발생하면서 머슴의 일이 복잡해졌기에 머슴의 기능을 최소화 하는 측면에서 만들기 시작했습니다.
+- 성능 튜닝을 위한 코드 Refactoring
+- JPA에 대한 이해와 쿼리, Stream을 이용해서 db 접근을 최소화하는 방식으로 진행
 
-## Skill
+```java
+    public void checkIn{
+        Stream<AttendanceStatus> checkOut=attendanceRepository.findAttendanceByUserId(findAttendanceOptional.get().getUser().getId())
 
-<img src="https://img.shields.io/badge/Java-007396?style=flat-square&logo=Java&logoColor=white"/> <img src="https://img.shields.io/badge/Spring-6DB33F?style=flat-square&logo=Spring&logoColor=white"/> <img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=flat-square&logo=Spring Boot&logoColor=white"/> <img src="https://img.shields.io/badge/Spring Security-6DB33F?style=flat-square&logo=Spring Security&logoColor=white"/> <img src="https://img.shields.io/badge/AWS-232F3E?style=flat-square&logo=Amazon AWS&logoColor=white"/> <img src="https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=MySQL&logoColor=white"/> 
-
-## tools
-
-<img src="https://img.shields.io/badge/Intellij-000000?style=flat-square&logo=Intellij IDEA&logoColor=white"/> <img src="https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=GitHub&logoColor=white"/>
-
-### Team Project Notion
-___Link___: [Notion] https://www.notion.so/savemecadet/LMS-24781856e3e5429490b8b88e0a1b8af8 
+        Stream<AttendanceStatus> checkIn=attendanceRepository.findAttendanceByUserId(findAttendanceOptional.get().getUser().getId())
 
 
-* * *
+        Stream<AttendanceStatus> checkOut2=attendanceRepository.findAttendanceByUserId(user.get().getId())
 
-## 기존의 Numbers 출결 관리 시스템
+        Stream<AttendanceStatus> checkIn2=attendanceRepository.findAttendanceByUserId(user.get().getId())
+    }
+    
+    public void checkOut {
+        Stream<AttendanceStatus> checkOut = attendanceRepository.findAttendanceByUserId(user.get().getId())
+       
 
-![스크린샷 2022-02-19 오전 8 04 58](https://user-images.githubusercontent.com/56079997/154772720-688fee97-d235-4576-82e5-f3b64586a71d.png)
+        Stream<AttendanceStatus> checkIn = attendanceRepository.findAttendanceByUserId(user.get().getId())
+        
+        Stream<AttendanceStatus> checkOut2 = attendanceRepository.findAttendanceByUserId(user.get().getId())
+        
+        Stream<AttendanceStatus> checkIn2 = attendanceRepository.findAttendanceByUserId(user.get().getId())
+    }
+    
+```
+- Stream으로 Functional Programming을 하려는 시도를 하였는데 Stream으로 만들때마다 Jpa로 데이터를 계속 뽑아오는 행위를 하였다.
+- Jpa로 뽑아오는 Stream 은 결국 같은 데이터를 뽑아오는데 중복으로 여러번 뽑아오는 시도를 하는 것
+```java
+    Stream<Attendance> checkInAndOutStatus = attendanceRepository.findAttendanceByUserId(findAttendanceOptional.get().getUser().getId());
+    final LocalDate today = findAttendanceOptional.get().getCalendar().getDate();
+    List<AttendanceStatus> checkInList = checkStatusList(checkInAndOutStatus, today, today.getMonth(), NONE);
 
-## 문제점
-- 달마다 인원추가가 있어서 Numbers를 전체적으로 수정을 해줘야 했습니다.
-- UI 측면에서 인원이 늘어남에 따라 가로로 추가되어 보기 어려워 졌습니다. 
-- 2주마다 팀이 변경되면서 인원 이동에 따라 팀 수정을 해야하는 불편한 점이 있었습니다.
+    final LocalDate date = LocalDate.now().with(TemporalAdjusters.previous(DayOfWeek.SATURDAY));
+    List<AttendanceStatus> checkInList2 = checkStatusList(checkInAndOutStatus, date, today.getMonth(), ABSENT);
+```
+- 중복 코드로 판단하여 중복코드를 제거 하였다.
+- CheckIn 함수와 CheckOut함수에 있는 출석 상태 관리하기 위한 코드들이 중복되는 것을 확인
+```java
+ public  List<AttendanceStatus> checkStatusList(Stream<Attendance> checkInAndOutStatus, LocalDate date, Month month, AttendanceStatus status) {
+        List<AttendanceStatus> checkOutList2 = checkInAndOutStatus
+                .filter(x -> x.getCheckOutStatus() == status
+                        && x.getCalendar().getDate().getMonth().equals(month)
+                        && x.getCalendar().getDate().isAfter(date))
+                .map(Attendance::getCheckOutStatus)
+                .collect(Collectors.toList());
 
-## 문제 해결을 위한 기능 추가
-***
-### 출결 관리
-- 머슴 관리 페이지와 출석표를 통해서 개인 수정 및 머슴 수정으로 수정 관리를 분리 하였습니다.
-- 출석 외
-  - 지각 +0.25 출결 점수 추가
-  - 결석 +0.5 출결 점수 추가
-  - 병결 : 점수 추가 x
-  - 휴가 : 점수 추가 x
-  - 출석 Label에 따라 출결 점수 차등 추가 하도록 하였습니다.
-- 출석 점수와 출결 점수를 구분 하여 참여한 달에 출석 우수자를 선정 할 수 있도록 하였습니다.
-
-### ToDo List
-- 학습 시간에 무엇을 할지 작성하는 ToDo List에서 달성 점수를 추가하였습니다.
-- 달성 Percentage 를 주어서 학습 동기를 부여하였습니다.
-
-### 아오지 탄광
-- 평일 외에 공부 학습 시간을 통해 출석 점수를 낮출 수 있는 시스템을 구현하였습니다.
-- 평일 외에 학습 시간에서 동료들과 함께 공부한다는 느낌을 주기위해 아오지 학습을 진행중인 동료들을 표기를 해주었습니다.
-- 아오지 탄광은 매일 오전 7시에 초기화 되며 아오지 탄광시 추가된 학습은 출결 점수에 반영이 되도록 하였으나 출석 점수에는 반영하지 않도록 하였습니다.
-
-
-
-* * *
-# Environment
-
-- AWS - Docker
-- __FrontEnd 기술 스택__ : React, java script
-- __BackEnd 기술 스택__ : Spring, java
-
-* * *
-## 초기 Figma - 기본 디자인
-
-![스크린샷 2022-02-19 오전 8 15 30](https://user-images.githubusercontent.com/56079997/154773501-273fbbf5-52cd-472e-82e5-94709c560c6c.png)
-![스크린샷 2022-02-19 오전 8 15 35](https://user-images.githubusercontent.com/56079997/154773545-cc5d5fa7-2458-4618-94d9-8e9e4461f1ce.png)
-
-* * *
-
-
-## 팀 원
-
-- ___Porject Design Plan___ : Taeskim
-- ___UI Design___ : Dhyeon
-- ___FrontEnd___ : Sham, Chanhyle
-- ___BackEnd___ : sjin
-
+        List<AttendanceStatus> checkInList2  = checkInAndOutStatus
+                .filter(x -> x.getCheckInStatus() == status
+                        && x.getCalendar().getDate().getMonth().equals(month)
+                        && x.getCalendar().getDate().isAfter(date))
+                .map(Attendance::getCheckInStatus)
+                .collect(Collectors.toList());
+        checkInList2.addAll(checkOutList2);
+        return checkInList2;
+    }
+```
+- 함수로 만들어서 기능 분리를 시켜주었다.
